@@ -3,10 +3,9 @@ package LinkedList;
 /*
 Here we need to keep track of the current pair nodes, node previous to the pair.
 DummyHead is a dummy pointer which keeps track of the swapped list and dummyHead.next is the head of the swapped list.
-SwappedHead is used to point to the node previous to the node pair. It is used to connect the swapped pair(i, i+1) to the sub list(0, i-1)
-prev points to the first node of the pair
-current points to second node of the pair
-next is used to hold the current->next temporarily
+prev is used to point to the node previous to the node pair. It is used to connect the swapped pair(i, i+1) to the sub list(0, i-1)
+current points to first node of the pair
+next is used to hold the first node of the next pair(current->next->next) temporarily
 */
 public class SwapNodesInPairs {
     public ListNode swapPairs(ListNode head) {
@@ -14,23 +13,19 @@ public class SwapNodesInPairs {
             return head;
 
         ListNode dummyHead = new ListNode();
-        ListNode swappedHead = dummyHead;
-        ListNode prev = head;
-        ListNode current = head.next;
-        ListNode next;
+        ListNode prev = dummyHead;
+        ListNode curr = head;
 
-        while(prev != null && current != null) {
-            next = current.next;
-            current.next = prev;
-            prev.next = next;
-            swappedHead.next = current;
+        while(curr != null && curr.next != null) {
+            ListNode next = curr.next.next;
+            ListNode second = curr.next;
 
-            if(next == null || next.next == null)
-                return dummyHead.next;
+            second.next = curr;
+            curr.next = next;
+            prev.next = second;
 
-            swappedHead = prev;
-            prev = next;
-            current = next.next;
+            prev = curr;
+            curr = next;
         }
         return dummyHead.next;
     }
